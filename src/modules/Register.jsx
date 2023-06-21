@@ -1,10 +1,16 @@
 import { withFormik, ErrorMessage  } from "formik";
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
-import Button from "../components/Button";
+import { useNavigate, Link } from "react-router-dom";
 import classNames from "classnames";
+import { connect } from 'react-redux'
+
+import store from '../redux/store'
 import validate from "../utils/helpers/validate"
+import userAction from '../redux/actions/user'
+
+import Button from "../components/Button";
 import Block from "../components/Layout/Block"
+
 
 const Register = (props) => {
     const {
@@ -22,6 +28,18 @@ const Register = (props) => {
 	useEffect(() => {
 		document.title = 'Register'
 	}, [])
+
+	// const navigate = useNavigate();
+	
+	// useEffect(() => {
+	// 	// if(window.localStorage.token !== '' || window.localStorage.token !== undefined || window.localStorage.token !== null) {
+	// 	// 	navigate("/login");
+	// 	// }
+	// 	// if (isAuth) {
+	// 	// 	return navigate("/home") ;
+	// 	// }
+
+	// }, [window.localStorage.token, navigate])
 
     return (
         <section className="inline-block text-center p-5">
@@ -56,10 +74,22 @@ const Register = (props) => {
 					/>
 					<ErrorMessage name="email" component="span" className="text-red-400 text-sm leading-3 text-start"/>
 					<input
-						className="w-80 py-3 px-5 mt-2 border-2 border-gray-200 border-solid rounded"
+						className={
+							classNames(
+								'w-80 py-3 px-5 mt-2 border-2 border-gray-200 border-solid rounded',
+								{'border-red-500' : touched.fullname && errors.fullname },
+								{'border-green-500' : touched.fullname && !errors.fullname}
+							)
+						}
 						type="text"
 						placeholder="Ваше имя и фамилия"
+						id="fullname"
+						value={values.fullname}
+						onChange={handleChange}
+						onBlur={handleBlur}
+						errors={errors}
 					/>
+					<ErrorMessage name="fullname" component="span" className="text-red-400 text-sm leading-3 text-start"/>
 					<input
 						className={
 							classNames(
@@ -78,35 +108,32 @@ const Register = (props) => {
 					/>
 					<ErrorMessage name="password" component="span" className="text-red-400 text-sm leading-3 text-start"/>
 					<input
-						className="w-80 py-3 px-5 mt-2 mb-3 border-2 border-gray-200 border-solid rounded"
-						type="text"
+						className={
+							classNames(
+								'w-80 py-3 px-5 mt-2 border-2 border-gray-200 border-solid rounded',
+								{'border-red-500' : touched.password_submit && errors.password_submit},
+								{'border-green-500' : touched.password_submit && !errors.password_submit},
+							)
+						}
 						placeholder="Повторите пароль"
+						type="password"
+						id="password_submit"
+						value={values.password_submit}
+						onChange={handleChange}
+						onBlur={handleBlur}
+						errors={errors}
 					/>
-					{
-						!isSubmitting ? 
-							<Button
-								htmlType="submit"
-								className="bg-blue-500 mt-3"
-								type="primary"
-								size="large"
-								onSubmit={handleSubmit}
-								>
-									Зарегистрироваться
-								</Button>
-						:
-							<Link to={'/home'}>
-								<Button
-									htmlType="submit"
-									className="bg-blue-500 mt-3"
-									type="primary"
-									size="large"
-									onSubmit={handleSubmit}
-								>
-									Зарегистрироваться
-								</Button>
-							</Link>
-					}
-
+					<ErrorMessage name="password_submit" component="span" className="text-red-400 text-sm leading-3 text-start mb-5"/>
+					<Button
+						htmlType='submit'
+						className='bg-blue-500 mt-3'
+						type='primary'
+						size='large'
+						onSubmit={handleSubmit}
+						disabled={isSubmitting}
+					>
+						Зарегистрироваться
+					</Button>
 					<Link to="/login" className="text-gray-500 mt-3">
 						Войти в аккаунт
 					</Link>
@@ -122,10 +149,13 @@ const MyEnhancedForm = withFormik({
 
     mapPropsToValues: () => ({ 
 		email: "",
-		password: "" 
+		fullname: "",
+		password: "" ,
+		password_submit: "" 
 	}),
 
     validate: (values) => {
+		console.log('values: ', values);
         let errors = {};
 
 		validate({ isAuth: false, errors, values })
@@ -137,13 +167,22 @@ const MyEnhancedForm = withFormik({
     },
 
     handleSubmit: (values, { setSubmitting }) => {
-        setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
-            setSubmitting(false);
-        }, 1000);
+		console.log('values: ', values)
+
+		store.dispatch(userAction.fetchUserRegister(values))
+
+		setSubmitting(false)
     },
 
     displayName: "Register", // helps with React DevTools
 })(Register);
 
-export default MyEnhancedForm;
+// export default MyEnhancedForm;
+
+
+export default connect(
+	({ user }) => console.log('user ', user) || ({
+		isAuth: user.isAuth,
+	}),
+	userAction
+)(MyEnhancedForm)

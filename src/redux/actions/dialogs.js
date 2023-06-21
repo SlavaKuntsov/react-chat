@@ -15,12 +15,18 @@ const actions = {
 	}),
 	fetchDialogs: () => dispatch => {
 		dispatch(actions.setIsLoading(true))
-		dialogsApi.
-			getAll()
+
+		window.axios.defaults.headers.common['token'] = window.localStorage['token']
+
+		dialogsApi
+			.getAll()
 			.then(({data}) => {
+				console.log(3)
 				dispatch(actions.setDialogs(data))
+				dispatch(actions.setIsLoading(false))
 			})
-			.then(() => {
+			.catch((err) => {
+				console.log(err)
 				dispatch(actions.setIsLoading(false))
 			})
 	}

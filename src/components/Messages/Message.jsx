@@ -68,7 +68,13 @@ function Message({ currentDialog, fetchMessages, items, isLoading }) {
 			: 
 				items && !isLoading && (
 					items.length > 0 ?
-						items.map((item) => <NewMessage {...item}/>)
+						items.map((item) => 
+						<NewMessage 
+							key={item._id}
+							_id={item._id}
+							isMe={item.user === item.dialog.author ? true : false}
+							{...item}
+						/>)
 					:
 						<Empty 
 							description='Сообщений нет' 

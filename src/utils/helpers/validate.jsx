@@ -18,6 +18,26 @@ export default ({isAuth, errors, values}) => {
 			) {
 				errors.password = isAuth ? 'Неверный пароль' : 'Слишком легкий пароль';
 			}
+		},
+		password_submit: (errors, value) => {
+			if (!isAuth && !value) {
+				errors.password_submit = "Введите пароль";
+			}  if (
+				!isAuth && value !== values.password
+			) {
+				errors.password_submit = 'Пароли не совпадают';
+			}else if (
+				!isAuth && !/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{3,})/.test(value)
+			) {
+				errors.password = isAuth ? 'Неверный пароль' : 'Слишком легкий пароль';
+			}
+		},
+		fullname: (errors, value) => {
+			console.log('errors: ', errors);
+			console.log('value: ', value);
+			if (!isAuth && (!value)) {
+				errors.fullname = "Введите свое имя и фамилию";
+			}
 		}
 	}
 

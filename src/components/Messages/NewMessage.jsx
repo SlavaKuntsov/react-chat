@@ -19,16 +19,16 @@ export default function NewMessage({
 	date,
 	audio,
 	user,
-	isMe,
 	created_at,
 	attachments,
 	isReaded,
 	isTyping,
 	_id,
 	dialog,
-	item
+	item,
+	author,
+	isMe
 }) {
-
 	const [isPlaying, setIsPlaying] = useState(false)
 	const [progress, setProgress] = useState(0)
 	const [currentTime, setCurrentTime] = useState(0)
@@ -83,7 +83,6 @@ export default function NewMessage({
 
 	return (
 		<div
-			id={_id}
 			key={_id}
 			className={classNames(
 				'message flex gap-2 shrink items-end',
@@ -106,9 +105,11 @@ export default function NewMessage({
 				}}
 				className='avatar rounded-full w-12 h-12 bg-[image:var(--image-url)] bg-no-repeat bg-cover bg-top bg-center'
 			></div> */}
-			<div className="avatar-container mb-6">
+
+
+			{/* <div className="avatar-container mb-6">
 				<Avatar avatar="" fullname="slava" _id={_id}/>
-			</div>
+			</div> */}
 			<div
 				className={classNames(
 					'message-info flex flex-col ',

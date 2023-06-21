@@ -2,28 +2,26 @@ import classNames from 'classnames'
 import { ErrorMessage, withFormik } from 'formik'
 import { React, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import axios from 'axios'
-import { connect } from 'react-redux'
+import store from '../redux/store'
 
 import Button from '../components/Button'
 import Block from '../components/Layout/Block'
+
+import userAction from '../redux/actions/user'
 import validate from '../utils/helpers/validate'
-import createNotification from '../utils/helpers/createNotification'
-import userAction from '../redux/actions/action'
 
-function Login(props) {
-	const {
-		values,
-		touched,
-		errors,
-		isSubmitting,
-		handleChange,
-		handleBlur,
-		handleSubmit,
-		handleReset,
-		dirty
-	} = props
-
+function Login({
+	values,
+	touched,
+	errors,
+	isSubmitting,
+	handleChange,
+	handleBlur,
+	handleSubmit,
+	handleReset,
+	dirty,
+	fetchUserLogin
+}) {
 	useEffect(() => {
 		document.title = 'Login'
 	}, [])
@@ -87,40 +85,16 @@ function Login(props) {
 						component='span'
 						className='text-red-400 text-sm leading-3 text-start'
 					/>
-						<Button
-							htmlType='submit'
-							className='bg-blue-500 mt-3'
-							type='primary'
-							size='large'
-							onSubmit={handleSubmit}
-							disabled={isSubmitting}
-						>
-							Войти в аккаунт
-						</Button>
-					{/* {!isSubmitting ? (
-						<Button
-							htmlType='submit'
-							className='bg-blue-500 mt-3'
-							type='primary'
-							size='large'
-							onSubmit={handleSubmit}
-						>
-							Войти в аккаунт
-						</Button>
-					) : (
-						<Link to={'/home'}>
-							<Button
-								htmlType='submit'
-								className='bg-blue-500 mt-3'
-								type='primary'
-								size='large'
-								onSubmit={handleSubmit}
-							>
-								Войти в аккаунт
-							</Button>
-						</Link>
-					)} */}
-
+					<Button
+						htmlType='submit'
+						className='bg-blue-500 mt-3'
+						type='primary'
+						size='large'
+						onSubmit={handleSubmit}
+						disabled={isSubmitting}
+					>
+						Войти в аккаунт
+					</Button>
 					<Link to='/register' className='text-gray-500 mt-3'>
 						Зарегистрироваться
 					</Link>
@@ -130,6 +104,7 @@ function Login(props) {
 	)
 }
 
+// container
 const MyEnhancedForm = withFormik({
 	enableReinitialize: true,
 
@@ -140,49 +115,17 @@ const MyEnhancedForm = withFormik({
 
 	validate: values => {
 		let errors = {}
-
 		validate({ isAuth: true, errors, values })
-
-		// console.log('values: ', values)
-		// console.log('errors: ', errors)
-
 		return errors
 	},
 
-	handleSubmit: (values, { setSubmitting }) => {
-		// setTimeout(() => {
-		// 	alert(JSON.stringify(values, null, 2))
-		// 	setSubmitting(false)
-		// }, 1000)
-		axios.post('/user/login', values)
-			.then((data) => {
-				const { status, token} = data.data
-				setSubmitting(false)
-				if(status === 'success') {
-					createNotification({
-						type: 'success',
-						title: 'Отлично!',
-						text: 'Авторизация прошла успешно'
-					})
-				}	
-				if(status === 'failed') {
-					createNotification({
-						type: 'error',
-						title: 'Ошибка при авторизации!',
-						text: 'Неверный логин или пароль'
-					})
-				}
-				if(status === 'error') {
-					createNotification({
-						type: 'error',
-						title: 'Ошибка!',
-						text: 'Пользователь не найден'
-					})
-				}
-			})
-			.catch(() => {
-				setSubmitting(false)
-			})
+	handleSubmit: (values, { setSubmitting, props }) => {
+		console.log('props: ', props)
+		console.log('values: ', values)
+
+		store.dispatch(userAction.fetchUserLogin(values, props))
+
+		setSubmitting(false)
 	},
 
 	displayName: 'Login' // helps with React DevTools

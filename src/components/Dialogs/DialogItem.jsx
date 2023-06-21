@@ -10,14 +10,18 @@ import ReadedIcon from '../../components/ReadedIcon'
 export default function DialogItem({
 	user,
 	unreaded,
-	isMe,
-	lastMessageTime,
+	isMe = true,
+	lastMessageTime = format(new Date(), 'yyyy-LL-dd'),
 	text,
 	_id,
 	getUser,
 	clearSearchInput,
 	selectDialog,
-	currentDialog
+	currentDialog,
+	avatar = 'red.jpg',
+	fullname = 'slava',
+	isOnline = false,
+	partner
 }) {
 	const getLastMessageTime = lastMessage => {
 		if (isToday(lastMessage)) {
@@ -36,15 +40,16 @@ export default function DialogItem({
 
 	useEffect(() => {
 		ref.current.offsetWidth < 297 ? setBoolWidth(true) : setBoolWidth(false)
-	}, [ref.current])
+	}, [])
 
 	return (
 		<div
+			ket={_id}
 			ref={ref}
 			className={classNames(
-				'dialog-item flex flex-row gap-3 items-center relative shadow-lg bg-white p-4 w-full h-20 rounded-md justify-between cursor-pointer transition-colors duration-300 ease-in-out',
-				{ 'bg-blue-200': currentDialog === _id },
-				{'hover:bg-slate-200' : currentDialog !== _id}
+				'dialog-item flex flex-row gap-3 items-center relative shadow-sm p-4 w-full h-20 rounded-md justify-between cursor-pointer transition-colors duration-300 ease-in-out border-solid border-2',
+				{ 'border-solid border-blue-300 border-2 shadow-md shadow-blue-100': currentDialog === _id},
+				{'bg-white hover:bg-slate-200 border-white hover:border-slate-200' : currentDialog !== _id}
 			)}
 			onClick={() => {
 				selectDialog(_id)
@@ -52,18 +57,21 @@ export default function DialogItem({
 				getUser(_id)
 			}}
 		>
-			<Avatar avatar={user.avatar} fullname={user.fullname} _id={_id}>
-				{user.isOnline && (
+			<Avatar avatar={null} fullname={partner} _id={_id}>
+				{isOnline && (
+					<span className='is-online absolute right-0  bottom-0 h-4 w-4 rounded-full bg-lime-500 border-[3px] border-solid border-white'></span>
+				)}
+				{isOnline && (
 					<span className='is-online absolute right-0  bottom-0 h-4 w-4 rounded-full bg-lime-500 border-[3px] border-solid border-white'></span>
 				)}
 			</Avatar>
 			<div className='info flex flex-col gap-0 lg:gap-1 justify-between grow'>
 				<div className='top  grow-0 shrink flex flex-row justify-between gap-2 items-start'>
 					<h5 className='fullname font-semibold lg:text-md text-sm'>
-						{user.fullname}
+						{partner.fullname}
 					</h5>
 					<span className='last-message text-gray-500 lg:leading-3 leading-[8px] font-light lg:text-sm text-xs'>
-						{getLastMessageTime(Date.parse(lastMessageTime))}
+						{getLastMessageTime(Date.parse(format(new Date(), 'yyyy-LL-dd HH:mm')))}
 					</span>
 				</div>
 				<div className='bottom flex grow-0 flex-row justify-between gap-2 items-center'>

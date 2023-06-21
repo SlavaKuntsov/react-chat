@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import Dialogs from "../components/Dialogs/Dialogs";
 import Message from "../components/Messages/Message";
@@ -11,6 +11,11 @@ import classNames from "classnames";
 // import dialogsJSON from "../../../src/dialogs.json"
 
 export default function Home(props) {
+
+	useEffect(() => {
+		document.title = 'Home'
+	}, [])
+	
     const [searchValue, setSearchValue] = React.useState("");
 
     const [userINfo, setUserInfo] = React.useState({

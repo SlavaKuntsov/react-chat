@@ -7,38 +7,43 @@ import dialogsActions from '../../../src/redux/actions/dialogs'
 import DialogItem from '../../../src/components/Dialogs/DialogItem'
 
 import { LoadingOutlined } from '@ant-design/icons'
-import { Empty, Spin } from 'antd'
+import { Empty } from 'antd'
 
 function Dialogs({
-	items = [],
+	items,
 	userId,
 	onSearch,
 	clearSearchInput,
 	fetchDialogs,
 	setCurrentDialog,
 	isLoading,
-	currentDialog
+	currentDialog,
+	dialogId
 }) {
 	const [getUser_Dialog, SETgetUser_Dialog] = useState(false)
 
-	const [filtred, setFiltred] = useState(Array.from(items))
+	const [filtred, setFiltred] = useState(items)
 
 	useEffect(() => {
 		setFiltred(
 			items.filter(
 				dialog =>
-					dialog.user.fullname
+					dialog.partner.fullname
 						.toLowerCase()
 						.indexOf(onSearch.toLowerCase()) >= 0
 			)
 		)
 	}, [onSearch])
 
+	console.log('items.length: ', items);
+
+
 	useEffect(() => {
-		if (!items.length) {
-			fetchDialogs()
-		} else {
+		if (items.length) {
 			setFiltred(items)
+		} else{
+			setTimeout(() => fetchDialogs(), 1000)
+			
 		}
 	}, [items])
 
@@ -84,11 +89,13 @@ function Dialogs({
 			{filtred.length ? (
 				orderBy(filtred, ['lastMessageTime'], ['asc']).map(item => (
 					<DialogItem
-						key={item.user._id}
+						key={item._id}
+						_id={item._id}
 						unreaded={item.unreaded}
-						isMe={item.user._id === userId}
+						isReaded={item.isReaded}
+						// isMe={item.author._id === userId}
 						{...item}
-						hashId={item._id}
+						// hashId={item._id}
 						getUser={id => SETgetUser_Dialog(id)}
 						clearSearchInput={bool => clearSearchInput(bool)}
 						selectDialog={setCurrentDialog}
