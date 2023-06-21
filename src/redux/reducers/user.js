@@ -8,12 +8,17 @@ const initialState = {
 
 export default ( state = initialState, {type, payload} ) => {
 	switch ( type ) {
-		case 'USER:SET_DATA': 
+		case 'USER:SET_AUTH': 
 			return {
 				...state,
 				data: payload,
 				isAuth: true,
 				token: window.localStorage.token
+			}
+		case 'USER:SET_DATA': 
+			return {
+				...state,
+				data: payload,
 			}
 		case 'USER:SET_VERIFY': 
 			return {

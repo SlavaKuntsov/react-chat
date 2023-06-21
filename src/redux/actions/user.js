@@ -6,6 +6,10 @@ const actions = {
 		type: 'USER:SET_DATA',
 		payload: data
 	}),
+	setAuth: data => ({
+		type: 'USER:SET_AUTH',
+		payload: data
+	}),
 	setVerify: data => ({
 		type: 'USER:SET_VERIFY',
 		payload: data
@@ -57,15 +61,12 @@ const actions = {
 			}
 		})
 	},
-	fetchVerify: postData => dispatch => {
+	fetchVerify: ({postData, codeResult}) => dispatch => {
 		userApi.verify(postData).then(code => {
-			console.log("code", code.data)
 			dispatch(actions.setVerify({verifyCode: code.data}))
 		})
 	},
 	fetchUserRegister: (postData, props) => dispatch => {
-		console.log('postData reg: ', postData);
-
 		
 		userApi.registration(postData).then(({ data }) => {
 			
@@ -81,26 +82,12 @@ const actions = {
 				})
 				// props.history.push('/home')
 				
-				dispatch(actions.fetchVerify(postData)) // verify user
+				// dispatch(actions.fetchVerify(postData)) // verify user
 
 				window.axios.defaults.headers.common['token'] = token
 				window.localStorage['token'] = token
 				
-				console.log('postData: ', postData);
-
-
-				// console.log('dispatch(actions.fetchVerify(postData)): ', dispatch(actions.fetchVerify(postData)));
-
-
-				// ========================================
-
-				
-				// setTimeout(() => {
-				// 	dispatch(actions.fetchUserLogin(postData))
-				// }, 1000)
-
-
-			// 	dispatch(actions.fetchUserData())
+				dispatch(actions.fetchUserLogin(postData))
 
 			// 	Navigate('/home')
 			}

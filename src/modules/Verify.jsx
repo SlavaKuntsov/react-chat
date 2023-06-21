@@ -2,12 +2,14 @@ import { Result } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { SmileOutlined } from '@ant-design/icons';
 import AuthCode from 'react-auth-code-input';
+import { connect } from 'react-redux'
 
 import userAction from '../redux/actions/user'
 import store from '../redux/store';
 import Block from '../components/Layout/Block'
 
-const Verify = ({code}) => {
+const Verify = ({code, data}) => {
+	console.log('VVVVV data: ', data);
 
 	useEffect(() => {
 		document.title = 'Verify'
@@ -18,10 +20,9 @@ const Verify = ({code}) => {
 	const handleOnChange = (res) => {
 		code(res)
 		setResult(res);
+		if(res.length === 6) store.dispatch(userAction.fetchVerify({postData: data, codeResult: res}))
 	};
-	
-	console.log('result: ', result);
-	
+
 	return (
 		<Block>
 			<Result
@@ -44,4 +45,12 @@ const Verify = ({code}) => {
 }
 
 
-export default Verify;
+export default connect(
+	({ user }) => console.log('user ', user) || ({
+		isAuth: user.isAuth,
+		verifyCode: user.verifyCode,
+		isVerify: user.isVerify,
+		data: user.data
+	}),
+	userAction
+)(Verify)

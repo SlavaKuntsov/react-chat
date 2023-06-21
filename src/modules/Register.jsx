@@ -167,9 +167,8 @@ const MyEnhancedForm = withFormik({
     },
 
     handleSubmit: (values, { setSubmitting }) => {
-		console.log('values: ', values)
-
-		store.dispatch(userAction.fetchUserRegister(values))
+		store.dispatch(userAction.fetchVerify({postData: values}))
+		store.dispatch(userAction.setUser(values))
 
 		setSubmitting(false)
     },

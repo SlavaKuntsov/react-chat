@@ -8,29 +8,24 @@ import Register from '../modules/Register'
 import Login from '../modules/Login'
 import Verify from '../modules/Verify';
 
-function Auth({isAuth, verifyCode, isVerify}) {
-	console.log(verifyCode);
+function Auth({isAuth, verifyCode, isVerify, data}) {
 
 	const navigate = useNavigate();
 	const [code, setCode] = useState()
-	console.log(code);
 	
 	useEffect(() => {
 		// if(window.localStorage.token !== '' || window.localStorage.token !== undefined || window.localStorage.token !== null) {
 		// 	navigate("/login");
 		// }
-		if (verifyCode !== null) {
-			console.log(111111111111111111111111111111)
+		
+		if (data) {
 			return navigate("/verify") ;
 		}
-		
-	}, [window.localStorage.token, isAuth, navigate, verifyCode, isVerify])
+	}, [window.localStorage.token, isAuth, navigate, verifyCode, isVerify, data])
 
-	if(`${verifyCode}` !== `${code}`) {
-		console.log(3333)
-	}
 	if(verifyCode === code) {
-		console.log(222222)
+		store.dispatch(userAction.fetchUserRegister(data))
+
 		return navigate("/home")
 	}
 
@@ -52,7 +47,8 @@ export default connect(
 	({ user }) => console.log('user ', user) || ({
 		isAuth: user.isAuth,
 		verifyCode: user.verifyCode,
-		isVerify: user.isVerify
+		isVerify: user.isVerify,
+		data: user.data
 	}),
 	userAction
 )(Auth)
