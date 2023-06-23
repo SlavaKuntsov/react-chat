@@ -112,7 +112,6 @@ function Dialogs({
 
 						setCurrent={(id, data) => {
 							store.dispatch(userAction.setCurrentDialog({id: id, data: data}))
-							console.log(1233456654)
 						}}
 
 						// hashId={item._id}

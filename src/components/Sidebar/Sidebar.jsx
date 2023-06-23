@@ -1,10 +1,15 @@
 import { HamburgerIcon } from '@chakra-ui/icons'
 import classNames from 'classnames'
 import React, { useState } from 'react'
+import { Link } from "react-router-dom";
+
+import userAction from '../../redux/actions/user'
+import dialogsActions from '../../redux/actions/dialogs'
+import store from '../../redux/store'
 
 import { TbLogout2 } from 'react-icons/tb'
 
-import TextWrapper from './TextWrapper'
+import TextWrapper from '../TextWrapper'
 import SidebarText from './SidebarText'
 
 export default function Sidebar({ getSidebarClick }) {
@@ -39,10 +44,35 @@ export default function Sidebar({ getSidebarClick }) {
 				</TextWrapper>
 			</div>
 
-			<div className='sidebar-logout w-full flex row items-center absolute bottom-4 left-3'>
+			<Link 
+				to={
+					sidebarClick && '/login'
+				}
+				className={
+					classNames(
+						'sidebar-logout flex row items-center absolute bottom-3 py-1 duration-500 transition-all rounded-lg',
+						{ 'hover:px-1 hover:bg-red-200 left-2 px-1': sidebarClick },
+						{ ' left-3': !sidebarClick }
+					)
+				}
+				style={{ width: 'calc(100% - 16px'}}
+				onClick={() => {
+					if (sidebarClick) {
+						store.dispatch(userAction.removeAuth())
+						store.dispatch(dialogsActions.removeDialogs())
+					}
+				}}
+			>
 				<div className="icon min-w-10">
 					<TbLogout2 
-						style={{ color: 'white', fontSize: '24px', width: '28px' }} 
+						className={
+							classNames(
+								'text-2xl',
+								{ 'text-lg': sidebarClick },
+								{ '': !sidebarClick }
+							)
+						}
+						style={{ color: 'white', width: '28px' }} 
 					/>
 				</div>
 				<TextWrapper>
@@ -50,7 +80,7 @@ export default function Sidebar({ getSidebarClick }) {
 						Logout
 					</SidebarText>
 				</TextWrapper>
-			</div>
+			</Link>
 		</div>
 	)
 }

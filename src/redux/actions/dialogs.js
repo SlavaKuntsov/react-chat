@@ -5,6 +5,9 @@ const actions = {
 		type: 'DIALOGS:SET_ITEMS', 
 		payload: items
 	}),
+	removeDialogs: () => ({
+		type: 'DIALOGS:REMOVE_ITEMS', 
+	}),
 	setIsLoading: bool => ({
 		type: 'DIALOGS:SET_IS_LOADING', 
 		payload: bool
@@ -15,11 +18,9 @@ const actions = {
 		data: data
 	}),
 	fetchCurrent: id => dispatch => {
-		console.log('id: ', id);
 		dialogsApi
 			.getCurrent({ dialog: id })
 			.then(({data}) => {
-				console.log('data: ', data);
 
 				// dispatch(actions.setCurrentDialog({ data: data }));
 			})
@@ -35,8 +36,6 @@ const actions = {
 		dialogsApi
 			.getAll()
 			.then(({data}) => {
-				console.log('data: ', data);
-				console.log(3)
 				dispatch(actions.setDialogs(data))
 				dispatch(actions.setIsLoading(false))
 			})

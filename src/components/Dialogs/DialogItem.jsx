@@ -26,9 +26,6 @@ const DialogItem = ({
 	setCurrent,
 	setName
 }) => {
-	console.log('name: ', currentDialogName)
-
-	console.log('ZZZZZZ currentDialogId: ', currentDialogId);
 	setName(currentDialogId)
 
 	const getLastMessageTime = lastMessage => {
@@ -89,8 +86,6 @@ const DialogItem = ({
 				// store.dispatch(dialogAction.fetchCurrent(_id))
 
 				setCurrent(_id, currentDialogId)
-				console.log('currentDialogId: ', currentDialogId);
-				console.log('_id: ', _id);
 				// getUser(_id)
 			}}
 		>

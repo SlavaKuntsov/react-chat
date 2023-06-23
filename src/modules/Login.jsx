@@ -120,8 +120,6 @@ const MyEnhancedForm = withFormik({
 	},
 
 	handleSubmit: (values, { setSubmitting, props }) => {
-		console.log('props: ', props)
-		console.log('values: ', values)
 
 		store.dispatch(userAction.fetchUserLogin(values, props))
 

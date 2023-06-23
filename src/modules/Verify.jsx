@@ -9,7 +9,6 @@ import userAction from '../redux/actions/user'
 import store from '../redux/store'
 
 const Verify = ({ code, data }) => {
-	console.log('VVVVV data: ', data)
 
 	useEffect(() => {
 		document.title = 'Verify'

@@ -15,6 +15,13 @@ export default (state = initialState, { type, payload }) => {
 				isAuth: true,
 				token: window.localStorage.token
 			}
+		case 'USER:REMOVE_AUTH':
+			return {
+				...state,
+				data: null,
+				isAuth: false,
+				token: null
+			}
 		case 'USER:SET_DATA':
 			return {
 				...state,

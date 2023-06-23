@@ -4,8 +4,6 @@ import PropTypes from "prop-types";
 import generateAvatarsFromHash from '../utils/helpers/generateAvatarsFromHash';
 
 const Avatar = ({children ,avatar, fullname, _id}) => {
-	console.log('avatar fullname: ', fullname);
-	console.log('_id: ', _id.length);
 	if(avatar) {
 		return (
 			<div

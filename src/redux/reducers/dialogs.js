@@ -11,6 +11,11 @@ export default ( state = initialState, {type, payload, data} ) => {
 				...state,
 				items: payload
 			}
+		case 'DIALOGS:REMOVE_ITEMS':
+			return {
+				...state,
+				items: []
+			}
 		case 'DIALOGS:SET_IS_LOADING':
 			return {
 				...state,

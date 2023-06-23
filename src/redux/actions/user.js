@@ -10,6 +10,9 @@ const actions = {
 		type: 'USER:SET_AUTH',
 		payload: data
 	}),
+	removeAuth: () => ({
+		type: 'USER:REMOVE_AUTH',
+	}),
 	setVerify: data => ({
 		type: 'USER:SET_VERIFY',
 		payload: data
@@ -20,21 +23,16 @@ const actions = {
 		data: data
 	}),
 	fetchMe: id => dispatch => {
-		console.log('id: ', id);
 		userApi
 			.getMe()
 			.then(({ data }) => {
-				console.log('dialog name data: ', data); //current dialog name
-
 				dispatch(actions.setCurrentDialog({ id: id, data: data }));
-				console.log(999999999)
 			})
 			.catch(err => {
 				console.log(err)
 			})
 	},
 	fetchUserData: () => dispatch => {
-		console.log('user data')
 		userApi
 			.getMe()
 			.then(({ data }) => {
@@ -47,12 +45,10 @@ const actions = {
 			})
 	},
 	fetchUserLogin: (postData, props) => dispatch => {
-		console.log('postData login: ', postData)
 
 		dispatch(actions.setVerify({ verify: true }))
 
 		userApi.login(postData).then(({ data }) => {
-			console.log('data: ', data)
 			const { status, token } = data
 			if (status === 'success') {
 				createNotification({
@@ -97,7 +93,6 @@ const actions = {
 		userApi
 			.registration(postData)
 			.then(({ data }) => {
-				console.log('data: ', data)
 				const { status, token } = data
 
 				if (status === 'success') {

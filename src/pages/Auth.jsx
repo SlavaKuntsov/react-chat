@@ -16,7 +16,7 @@ function Auth({ isAuth, verifyCode, verify, data }) {
 		// if(window.localStorage.token !== '' || window.localStorage.token !== undefined || window.localStorage.token !== null) {
 		// 	navigate("/login");
 		// }
-		if(verify) {
+		if(isAuth) {
 			return navigate('/home')
 		}
 		if (data && !verify) {

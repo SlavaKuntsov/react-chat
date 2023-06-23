@@ -14,7 +14,6 @@ import messagesActions from '../../../src/redux/actions/message'
 import DialogItem from '../Dialogs/DialogItem';
 
 function Message({ currentDialog, fetchMessages, items, isLoading, dialogName, currentDialogName, user }) {
-	console.log('MMMMMMMMMM user: ', user);
 
 	const antIcon = (
 		<LoadingOutlined
@@ -72,8 +71,8 @@ function Message({ currentDialog, fetchMessages, items, isLoading, dialogName, c
 				: 
 					items && !isLoading && (
 						items.length > 0 ?
-							items.map((item) => console.log('item: ', item) ||
-							
+							items.map((item) => 
+
 							<NewMessage 
 								key={item._id}
 								_id={item._id}

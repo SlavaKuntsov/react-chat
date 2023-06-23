@@ -34,7 +34,6 @@ export default ({isAuth, errors, values}) => {
 		},
 		fullname: (errors, value) => {
 			console.log('errors: ', errors);
-			console.log('value: ', value);
 			if (!isAuth && (!value)) {
 				errors.fullname = "Введите свое имя и фамилию";
 			}

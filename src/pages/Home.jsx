@@ -10,7 +10,7 @@ import store from '../redux/store'
 import Dialogs from '../components/Dialogs/Dialogs'
 import Message from '../components/Messages/Message'
 import userAction from '../redux/actions/user'
-import Sidebar from '../components/Sidebar'
+import Sidebar from '../components/Sidebar/Sidebar'
 // import dialogsActions from '../../../src/redux/actions/dialogs'
 
 const Home = ({ user, items }) => {
@@ -22,7 +22,6 @@ const Home = ({ user, items }) => {
 	}, [])
 
 	const [searchValue, setSearchValue] = React.useState('')
-	console.log('searchValue: ', searchValue);
 
 	const [userINfo, setUserInfo] = React.useState({
 		name: 'null',
@@ -30,8 +29,6 @@ const Home = ({ user, items }) => {
 	})
 
 	useEffect(() => {
-		console.log(9)
-
 		return store.dispatch(userAction.fetchUserData())
 	}, [])
 
