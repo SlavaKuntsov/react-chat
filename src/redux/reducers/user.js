@@ -6,27 +6,27 @@ const initialState = {
 	verifyCode: null
 }
 
-export default ( state = initialState, {type, payload} ) => {
-	switch ( type ) {
-		case 'USER:SET_AUTH': 
+export default (state = initialState, { type, payload }) => {
+	switch (type) {
+		case 'USER:SET_AUTH':
 			return {
 				...state,
 				data: payload,
 				isAuth: true,
 				token: window.localStorage.token
 			}
-		case 'USER:SET_DATA': 
+		case 'USER:SET_DATA':
 			return {
 				...state,
-				data: payload,
+				data: payload
 			}
-		case 'USER:SET_VERIFY': 
+		case 'USER:SET_VERIFY':
 			return {
 				...state,
 				verifyCode: payload.verifyCode,
-				isVerify: payload.verify
+				verify: payload.verify
 			}
-		default: 
+		default:
 			return state
 	}
 }

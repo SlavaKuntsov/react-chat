@@ -4,6 +4,8 @@ import PropTypes from "prop-types";
 import generateAvatarsFromHash from '../utils/helpers/generateAvatarsFromHash';
 
 const Avatar = ({children ,avatar, fullname, _id}) => {
+	console.log('avatar fullname: ', fullname);
+	console.log('_id: ', _id.length);
 	if(avatar) {
 		return (
 			<div
@@ -14,7 +16,7 @@ const Avatar = ({children ,avatar, fullname, _id}) => {
 	}
 	if(avatar === null || avatar === "") {
 		const {color, lighten} = generateAvatarsFromHash(_id)
-		const firstChar = fullname.fullname.charAt(0)
+		const firstChar = fullname.charAt(0)
 		return <div 
 			className={`avatar-empty rounded-full shrink-0 lg:w-12 lg:h-12 w-10 h-10 flex items-center justify-center relative text-white lg:text-xl text-lg uppercase`}
 			style={{backgroundImage: `linear-gradient(135deg, ${color} 00%, ${lighten} 90%)`}}

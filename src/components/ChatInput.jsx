@@ -23,7 +23,7 @@ export default function ChatInput () {
 	const styleBtn = {fontSize: '18px', color: 'rgb(107 114 128 / .9)'};
 
 	return (
-		<div className="chat-message-input w-[96%] lg:py-3 py-2 flex flex-row gap-4 justify-between items-center">
+		<div className="chat-message-input w-[96%] lg:py-4 py-2 flex flex-row gap-4 justify-between items-center">
 
 			<div className="smile-btn cursor-pointer relative">
 				<SmileOutlined className='hover' style={styleBtn} onClick={() => setVisibleEmojiPicker(!visibleEmojiPicker)}/>

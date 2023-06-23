@@ -1,32 +1,33 @@
 import React, { useEffect, useState } from 'react'
-import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import { connect } from 'react-redux'
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom'
 
-import userAction from '../redux/actions/user'
-import store from '../redux/store';
-import Register from '../modules/Register'
 import Login from '../modules/Login'
-import Verify from '../modules/Verify';
+import Register from '../modules/Register'
+import Verify from '../modules/Verify'
+import userAction from '../redux/actions/user'
+import store from '../redux/store'
 
-function Auth({isAuth, verifyCode, isVerify, data}) {
-
-	const navigate = useNavigate();
+function Auth({ isAuth, verifyCode, verify, data }) {
+	const navigate = useNavigate()
 	const [code, setCode] = useState()
-	
+
 	useEffect(() => {
 		// if(window.localStorage.token !== '' || window.localStorage.token !== undefined || window.localStorage.token !== null) {
 		// 	navigate("/login");
 		// }
-		
-		if (data) {
-			return navigate("/verify") ;
+		if(verify) {
+			return navigate('/home')
 		}
-	}, [window.localStorage.token, isAuth, navigate, verifyCode, isVerify, data])
+		if (data && !verify) {
+			return navigate('/verify')
+		}
+	}, [window.localStorage.token, isAuth, navigate, verifyCode, verify, data])
 
-	if(verifyCode === code) {
+	if (verifyCode === code && !verify) {
 		store.dispatch(userAction.fetchUserRegister(data))
 
-		return navigate("/home")
+		return navigate('/home')
 	}
 
 	return (
@@ -36,19 +37,23 @@ function Auth({isAuth, verifyCode, isVerify, data}) {
 					<Route path={path} element={<Login />} key={id} />
 				))}
 				<Route path='/register' element={<Register />} />
-				<Route path='/verify' element={<Verify code={code => setCode(code)}/>} />
-				<Route path="*" element={<Navigate to="/404" replace />} />
+				<Route
+					path='/verify'
+					element={<Verify code={code => setCode(code)} />}
+				/>
+				<Route path='*' element={<Navigate to='/404' replace />} />
 			</Routes>
 		</section>
 	)
 }
 
 export default connect(
-	({ user }) => console.log('user ', user) || ({
-		isAuth: user.isAuth,
-		verifyCode: user.verifyCode,
-		isVerify: user.isVerify,
-		data: user.data
-	}),
+	({ user }) =>
+		console.log('user ', user) || {
+			isAuth: user.isAuth,
+			verifyCode: user.verifyCode,
+			verify: user.verify,
+			data: user.data
+		},
 	userAction
 )(Auth)

@@ -11,8 +11,10 @@ import ChatInput from "../../components/ChatInput";
 import Status from "../../components/Status";
 import NewMessage from './NewMessage'
 import messagesActions from '../../../src/redux/actions/message'
+import DialogItem from '../Dialogs/DialogItem';
 
-function Message({ currentDialog, fetchMessages, items, isLoading }) {
+function Message({ currentDialog, fetchMessages, items, isLoading, dialogName, currentDialogName, user }) {
+	console.log('MMMMMMMMMM user: ', user);
 
 	const antIcon = (
 		<LoadingOutlined
@@ -40,10 +42,9 @@ function Message({ currentDialog, fetchMessages, items, isLoading }) {
 	if(currentDialog) {
 		return (
 	<>
-		<div className="chat-header px-3 pt-4 pb-0 mb-3 grow flex flex-col gap-1 justify-center items-center">
+		<div className="chat-header h-10 px-3 pt-4 pb-0 mb-4 grow flex flex-col gap-1 justify-center items-center">
 			<h3 className="username font-semibold">
-				{/* {userINfo.name} */}
-				slava
+				{currentDialogName}
 			</h3>
 			<Status userINfo={true} />
 			<EllipsisOutlined
@@ -54,36 +55,42 @@ function Message({ currentDialog, fetchMessages, items, isLoading }) {
 				className="absolute top-5 right-5"
 			/>
 		</div>
-		<div 
-			ref={messagesRef}
-			className={
-				classNames(
-					'chat-message h-full w-full px-4 overflow-y-auto overflow-x-hidden flex flex-col gap-3',
-					{'messages-loading items-center justify-center': isLoading || !items.length}
-				)
-			}
-		>
-			{isLoading  ?
-				<Spin tip="Загрузка" indicator={antIcon} />
-			: 
-				items && !isLoading && (
-					items.length > 0 ?
-						items.map((item) => 
-						<NewMessage 
-							key={item._id}
-							_id={item._id}
-							isMe={item.user === item.dialog.author ? true : false}
-							{...item}
-						/>)
-					:
-						<Empty 
-							description='Сообщений нет' 
-							image={Empty.PRESENTED_IMAGE_SIMPLE} 
-							// image={Empty.PRESENTED_IMAGE_DEFAULT} 
-						/>
-				)
-			}
-		</div>
+		{/* <div className="chat-message-wrap table h-full w-full"> */}
+			<div 
+				ref={messagesRef}
+				style={{ scrollbarWidth: 'none'}}
+				className={
+					classNames(
+						// 'chat-message h-full w-full px-4 overflow-y-auto overflow-x-hidden table-cell align-bottom',
+						'chat-message h-full w-full px-4 overflow-y-auto overflow-x-hidden flex flex-col gap-3',
+						{'messages-loading items-center justify-center': isLoading || !items.length}
+					)
+				}
+			>
+				{isLoading  ?
+					<Spin tip="Загрузка" indicator={antIcon} />
+				: 
+					items && !isLoading && (
+						items.length > 0 ?
+							items.map((item) => console.log('item: ', item) ||
+							
+							<NewMessage 
+								key={item._id}
+								_id={item._id}
+								isMe={item.user === user._id ? true : false}
+								{...item}
+							/>)
+						:
+							<Empty 
+								description='Сообщений нет' 
+								image={Empty.PRESENTED_IMAGE_SIMPLE} 
+								// image={Empty.PRESENTED_IMAGE_DEFAULT} 
+							/>
+					)
+				}
+			</div>
+
+		{/* </div> */}
 		<ChatInput />
 	</>
 		)
@@ -117,10 +124,12 @@ Message.propTypes = {
 }
 
 export default connect(
-	({ dialogs, message }) => ({
+	({ dialogs, message, user }) => ({
 		currentDialog: dialogs.currentDialog,
 		items: message.items,
-		isLoading: message.isLoading
+		isLoading: message.isLoading,
+		currentDialogName: dialogs.currentDialogData,
+		user: user.data
 	}),
 	messagesActions
 )(Message)

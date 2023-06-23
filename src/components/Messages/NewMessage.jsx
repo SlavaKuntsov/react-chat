@@ -29,6 +29,7 @@ export default function NewMessage({
 	author,
 	isMe
 }) {
+	console.log('isMe: ', isMe);
 	const [isPlaying, setIsPlaying] = useState(false)
 	const [progress, setProgress] = useState(0)
 	const [currentTime, setCurrentTime] = useState(0)

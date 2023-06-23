@@ -5,6 +5,8 @@ import { connect } from 'react-redux'
 
 import dialogsActions from '../../../src/redux/actions/dialogs'
 import DialogItem from '../../../src/components/Dialogs/DialogItem'
+import userAction from '../../redux/actions/user'
+import store from '../../redux/store'
 
 import { LoadingOutlined } from '@ant-design/icons'
 import { Empty } from 'antd'
@@ -18,32 +20,35 @@ function Dialogs({
 	setCurrentDialog,
 	isLoading,
 	currentDialog,
-	dialogId
+	dialogId,
+	user,
+	currentDialogName
 }) {
-	const [getUser_Dialog, SETgetUser_Dialog] = useState(false)
+	
+	console.log('currentDialogName: ', currentDialogName);
+	// const [getUser_Dialog, SETgetUser_Dialog] = useState(false)
 
 	const [filtred, setFiltred] = useState(items)
+	const [dialogName, setDialogName] = useState('')
+
 
 	useEffect(() => {
 		setFiltred(
 			items.filter(
-				dialog =>
-					dialog.partner.fullname
+				dialog => console.log('qqqqqqqqqq dialog: ', dialog) ||
+				(user.email === dialog.partner.email ? dialog.author.fullname : dialog.partner.fullname)
 						.toLowerCase()
 						.indexOf(onSearch.toLowerCase()) >= 0
 			)
 		)
 	}, [onSearch])
 
-	console.log('items.length: ', items);
-
-
 	useEffect(() => {
 		if (items.length) {
 			setFiltred(items)
 		} else{
-			setTimeout(() => fetchDialogs(), 1000)
-			
+			// setTimeout(() => fetchDialogs(), 1000)
+			fetchDialogs()
 		}
 	}, [items])
 
@@ -55,6 +60,11 @@ function Dialogs({
 			spin
 		/>
 	)
+
+	const delayFunction = res => {
+			return res
+	}
+
 
 	return (
 		<section
@@ -87,16 +97,26 @@ function Dialogs({
 				/>
 			)} */}
 			{filtred.length ? (
-				orderBy(filtred, ['lastMessageTime'], ['asc']).map(item => (
+				orderBy(filtred, ['lastMessageTime'], ['asc']).map(item => console.log('filtred ', item) || (
 					<DialogItem
 						key={item._id}
 						_id={item._id}
-						unreaded={item.unreaded}
-						isReaded={item.isReaded}
-						// isMe={item.author._id === userId}
+						// unreaded={item.unreaded}
+						// isReaded={item.isReaded}
+						// // isMe={item.author._id === userId}
+						
+						currentDialogId={user ? (delayFunction(user.email === item.partner.email ? item.author.fullname : item.partner.fullname )) : 'name'}
 						{...item}
+
+						setName={name => setDialogName(name)}
+
+						setCurrent={(id, data) => {
+							store.dispatch(userAction.setCurrentDialog({id: id, data: data}))
+							console.log(1233456654)
+						}}
+
 						// hashId={item._id}
-						getUser={id => SETgetUser_Dialog(id)}
+						// getUser={id => SETgetUser_Dialog(id)}
 						clearSearchInput={bool => clearSearchInput(bool)}
 						selectDialog={setCurrentDialog}
 						currentDialog={currentDialog}
@@ -114,10 +134,12 @@ function Dialogs({
 }
 
 export default connect(
-	({ dialogs }) => ({
+	({ dialogs, user }) => console.log('dialogs: ', dialogs) || console.log('user ', user) || ({
 		isLoading: dialogs.isLoading,
 		currentDialog: dialogs.currentDialog,
-		items: dialogs.items
+		items: dialogs.items,
+		user: user.data,
+		currentDialogName: dialogs.currentDialogData
 	}),
 	dialogsActions
 )(Dialogs)

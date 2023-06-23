@@ -5,7 +5,7 @@ const getCorrect = (number) => {
 }
 
 export default hash => {
-	const [r, g, b] = hash.substr(6, 9).split('').map(char => getCorrect(char.charCodeAt(0)))
+	const [r, g, b] = hash.substr(14, 17).split('').map(char => getCorrect(char.charCodeAt(0)))
 
 	return{
 		color : tinycolor({r, g, b}).lighten(15).saturate(20).toHexString(),

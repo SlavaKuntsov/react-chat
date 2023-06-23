@@ -4,7 +4,7 @@ const initialState = {
 	isLoading: false
 }
 
-export default ( state = initialState, {type, payload} ) => {
+export default ( state = initialState, {type, payload, data} ) => {
 	switch ( type ) {
 		case 'DIALOGS:SET_ITEMS':
 			return {
@@ -19,7 +19,8 @@ export default ( state = initialState, {type, payload} ) => {
 		case 'DIALOGS:SET_CURRENT_DIALOG':
 			return {
 				...state,
-				currentDialog: payload
+				currentDialog: payload,
+				currentDialogData: data
 			}
 		default: return state
 	}
