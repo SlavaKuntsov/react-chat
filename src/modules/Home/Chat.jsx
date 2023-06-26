@@ -3,23 +3,21 @@ import FormOutlined from '@ant-design/icons/FormOutlined'
 import TeamOutlined from '@ant-design/icons/TeamOutlined'
 import { Input } from 'antd'
 import classNames from 'classnames'
+import { connect } from 'react-redux'
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom'
 
-// The default icon size is 1em (16px)
-
-import store from '../redux/store'
-import Dialogs from '../components/Dialogs/Dialogs'
-import Message from '../components/Messages/Message'
-import userAction from '../redux/actions/user'
-import Sidebar from '../components/Sidebar/Sidebar'
+import Dialogs from '../../components/Dialogs/Dialogs'
+import Message from '../../components/Messages/Message'
+import Sidebar from '../../components/Sidebar/Sidebar'
+import userAction from '../../redux/actions/user'
+import store from '../../redux/store'
 // import dialogsActions from '../../../src/redux/actions/dialogs'
 
-const Home = ({ user, items }) => {
-
+const Messenger = ({ user, data }) => {
 	const [sidebarClick, setSidebarClick] = useState(false)
 
-	useEffect(() => {
-		document.title = 'Home'
-	}, [])
+	const navigate = useNavigate()
+
 
 	const [searchValue, setSearchValue] = React.useState('')
 
@@ -29,31 +27,37 @@ const Home = ({ user, items }) => {
 	})
 
 	useEffect(() => {
-		return store.dispatch(userAction.fetchUserData())
+		store.dispatch(userAction.setIsLoading(false))
+		
+		document.title = 'Chat'
+
+		// if(!data) {
+		// 	navigate('/login')
+		// 	return 
+		// }
+
+		return store.dispatch(userAction.fetchUserData(false))
 	}, [])
 
-
 	return (
-		<div className='home w-full h-full overflow-hidden'>
+		<div className='Chat w-full h-full overflow-hidden'>
 			{/* {sidebarClick &&  */}
-				<div
-					style={{ 
-						background: 'linear-gradient(90deg, rgba(248,250,252,0.19592849346769958) 0%, rgba(180,180,180,0.6188976811427696) 24%, rgba(119,119,119,0.6244999220391281) 61%, rgba(85,85,85,0.7813626671371674) 100%)',
-						animation: 'cubic-bezier(.36,.75,.93,.56)'
-					}}
-					className={
-						classNames(
-							`dark h-full w-9/12 absolute right-0 top-0 duration-1000 transition-all`,
-							{'opacity-0 z-0': !sidebarClick},
-							{'opacity-100 z-30': sidebarClick},
-						)
-					}></div>
+			{/* <div
+				style={{
+					background:
+						'linear-gradient(90deg, rgba(248,250,252,0.19592849346769958) 0%, rgba(180,180,180,0.6188976811427696) 24%, rgba(119,119,119,0.6244999220391281) 61%, rgba(85,85,85,0.7813626671371674) 100%)',
+					animation: 'cubic-bezier(.36,.75,.93,.56)'
+				}}
+				className={classNames(
+					`dark h-full w-9/12 absolute right-0 top-0 duration-1000 transition-all`,
+					{ 'opacity-0 z-0': !sidebarClick },
+					{ 'opacity-100 z-30': sidebarClick }
+				)}
+			></div> */}
 			{/* } */}
-			<div className='chat h-full flex flex-row '>
-
-
+			<div className='chat h-full flex flex-row z-10'>
 				{/* sidebar menu */}
-				<Sidebar getSidebarClick={click => setSidebarClick(click)}/>
+				<Sidebar getSidebarClick={click => setSidebarClick(click)} />
 
 				{/* dialogs list */}
 				<div className='chat-sidebar w-[320px] ml-20 h-full flex flex-col gap-8 items-start'>
@@ -103,10 +107,10 @@ const Home = ({ user, items }) => {
 				{/* current dialog */}
 				<div
 					className={classNames(
-						'chat-dialog h-full w-full flex flex-col items-center justify-center',
+						'chat-dialog h-full w-full flex flex-col items-center justify-center'
 					)}
 				>
-					<Message/>
+					<Message user={user}/>
 				</div>
 			</div>
 			{/*
@@ -154,14 +158,11 @@ const Home = ({ user, items }) => {
 	)
 }
 
-// export default connect(
-// 	({ dialogs, user }) => console.log('dialogs: ', dialogs) || console.log('user ', user) || ({
-// 		isLoading: dialogs.isLoading,
-// 		currentDialog: dialogs.currentDialog,
-// 		items: dialogs.items,
-// 		user: user.data
-// 	}),
-// 	dialogsActions, userAction
-// )(Home)
+export default connect(
+	({  user }) => console.log('user ', user) || ({
+		data: user.data,
+		user: user
+	}),
+	 userAction
+)(Messenger)
 
-export default Home

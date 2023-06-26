@@ -27,7 +27,9 @@ export default function NewMessage({
 	dialog,
 	item,
 	author,
-	isMe
+	isMe,
+	// userId,
+	// itemUser
 }) {
 	const [isPlaying, setIsPlaying] = useState(false)
 	const [progress, setProgress] = useState(0)
@@ -41,6 +43,17 @@ export default function NewMessage({
 			audioElem.current.pause()
 		}
 	}
+
+	// const [isMe, setIsMe] = useState(false)
+	// console.log('isMe: ', isMe);
+	// useEffect(() => {
+	// 	if (userId === itemUser) {
+	// 		setIsMe(true)
+	// 	}
+	// 	else if (userId !== itemUser) {
+	// 		setIsMe(false)
+	// 	}
+	// }, [])
 
 	useEffect(() => {
 		if (audioElem.current !== null) {

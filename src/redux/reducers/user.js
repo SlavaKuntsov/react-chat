@@ -3,7 +3,8 @@ const initialState = {
 	isAuth: false,
 	token: window.localStorage.token || null,
 	verify: false,
-	verifyCode: null
+	verifyCode: null,
+	isAuthLoading: false,
 }
 
 export default (state = initialState, { type, payload }) => {
@@ -26,6 +27,11 @@ export default (state = initialState, { type, payload }) => {
 			return {
 				...state,
 				data: payload
+			}
+		case 'USER:SET_IS_LOADING':
+			return {
+				...state,
+				isAuthLoading: payload
 			}
 		case 'USER:SET_VERIFY':
 			return {

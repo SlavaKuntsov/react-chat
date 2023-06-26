@@ -4,12 +4,12 @@ import { Link } from "react-router-dom";
 import classNames from "classnames";
 import { connect } from 'react-redux'
 
-import store from '../redux/store'
-import validate from "../utils/helpers/validate"
-import userAction from '../redux/actions/user'
+import store from '../../redux/store'
+import validate from "../../utils/helpers/validate"
+import userAction from '../../redux/actions/user'
 
-import Button from "../components/Button";
-import Block from "../components/Layout/Block"
+import Button from "../../components/Button";
+import Block from "../../components/Layout/Block"
 
 
 const Register = (props) => {
@@ -27,6 +27,7 @@ const Register = (props) => {
 	
 	useEffect(() => {
 		document.title = 'Register'
+		// store.dispatch(userAction.removeAuth())
 	}, [])
 
 	// const navigate = useNavigate();

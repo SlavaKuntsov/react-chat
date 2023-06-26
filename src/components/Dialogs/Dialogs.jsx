@@ -25,7 +25,6 @@ function Dialogs({
 	currentDialogName
 }) {
 	
-	console.log('currentDialogName: ', currentDialogName);
 	// const [getUser_Dialog, SETgetUser_Dialog] = useState(false)
 
 	const [filtred, setFiltred] = useState(items)
@@ -97,7 +96,7 @@ function Dialogs({
 				/>
 			)} */}
 			{filtred.length ? (
-				orderBy(filtred, ['lastMessageTime'], ['asc']).map(item => console.log('filtred ', item) || (
+				orderBy(filtred, ['lastMessageTime'], ['asc']).map(item => (
 					<DialogItem
 						key={item._id}
 						_id={item._id}

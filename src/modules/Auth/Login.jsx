@@ -2,13 +2,13 @@ import classNames from 'classnames'
 import { ErrorMessage, withFormik } from 'formik'
 import { React, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import store from '../redux/store'
 
-import Button from '../components/Button'
-import Block from '../components/Layout/Block'
+import Button from '../../components/Button'
+import Block from '../../components/Layout/Block'
 
-import userAction from '../redux/actions/user'
-import validate from '../utils/helpers/validate'
+import store from '../../redux/store'
+import userAction from '../../redux/actions/user'
+import validate from '../../utils/helpers/validate'
 
 function Login({
 	values,
@@ -24,6 +24,7 @@ function Login({
 }) {
 	useEffect(() => {
 		document.title = 'Login'
+
 	}, [])
 
 	return (

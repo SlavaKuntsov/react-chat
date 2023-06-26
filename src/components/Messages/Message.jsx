@@ -72,11 +72,13 @@ function Message({ currentDialog, fetchMessages, items, isLoading, dialogName, c
 					items && !isLoading && (
 						items.length > 0 ?
 							items.map((item) => 
-
+						
 							<NewMessage 
 								key={item._id}
 								_id={item._id}
-								isMe={item.user === user._id ? true : false}
+								isMe={item.user === user.data._id ? true : false}
+								// itemUser={item.user}
+								// userId={user.data && user.data._id}
 								{...item}
 							/>)
 						:
@@ -128,7 +130,6 @@ export default connect(
 		items: message.items,
 		isLoading: message.isLoading,
 		currentDialogName: dialogs.currentDialogData,
-		user: user.data
 	}),
 	messagesActions
 )(Message)

@@ -22,6 +22,10 @@ const actions = {
 		payload: id,
 		data: data
 	}),
+	setIsLoading: bool => ({
+		type: 'USER:SET_IS_LOADING', 
+		payload: bool
+	}),
 	fetchMe: id => dispatch => {
 		userApi
 			.getMe()
@@ -32,13 +36,24 @@ const actions = {
 				console.log(err)
 			})
 	},
-	fetchUserData: () => dispatch => {
+	fetchUserData: bool => dispatch => {
 		userApi
 			.getMe()
 			.then(({ data }) => {
+				// dispatch(actions.setIsLoading(true))
+
 				dispatch(actions.setUser(data))
 				dispatch(actions.setAuth(data))
 				dispatch(actions.setVerify({ verify: true }))
+
+				if(bool) {
+					console.log(1)
+					dispatch(actions.setIsLoading(true))
+				}
+				if(!bool) {
+					console.log(2)
+					dispatch(actions.setIsLoading(false))
+				}
 			})
 			.catch(err => {
 				console.log(err)
@@ -51,6 +66,7 @@ const actions = {
 		userApi.login(postData).then(({ data }) => {
 			const { status, token } = data
 			if (status === 'success') {
+
 				createNotification({
 					type: 'success',
 					title: 'Отлично!',
@@ -61,7 +77,11 @@ const actions = {
 				window.axios.defaults.headers.common['token'] = token
 				window.localStorage['token'] = token
 
-				dispatch(actions.fetchUserData())
+				dispatch(actions.setIsLoading(true))
+
+				dispatch(actions.fetchUserData(true))
+
+
 
 				// Navigate('/home')
 			}

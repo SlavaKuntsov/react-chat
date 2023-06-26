@@ -4,12 +4,11 @@ import React, { useEffect, useState } from 'react'
 import AuthCode from 'react-auth-code-input'
 import { connect } from 'react-redux'
 
-import Block from '../components/Layout/Block'
-import userAction from '../redux/actions/user'
-import store from '../redux/store'
+import Block from '../../components/Layout/Block'
+import userAction from '../../redux/actions/user'
+import store from '../../redux/store'
 
 const Verify = ({ code, data }) => {
-
 	useEffect(() => {
 		document.title = 'Verify'
 	}, [])
